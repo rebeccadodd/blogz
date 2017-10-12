@@ -8,13 +8,12 @@
     <h3>No blogs yet</h3>
     {% else %}
 
-       <div class="blogEntry">
-           {% for blog in all_blogs %}
-            <h2><a href="blog?id={{blog.id}}">{{blog.title}}</a></h2>
-            <p>{{blog.body}}</p>
-            <hr>
-            {% endfor %}
-        </div>
+        {% for blog in all_blogs|sort(attribute='id', reverse = True) %}
+        <h2><a href="blog?id={{blog.id}}">{{blog.title}}</a></h2>
+        <p>{{blog.body}}</p>
+        <hr>
+        {% endfor %}
+
     
     {% endif %}
 {% endblock %}

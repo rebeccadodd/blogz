@@ -2,12 +2,17 @@
 <html>
     <head>
         <title>{{title}}</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css')}}">
+        <style>
+            h1 {text-align:center;}
+            text { width: 300px; }
+            textarea { width: 300px; height: 75px }
+        </style>
     </head>
     <body>
         <nav>
             <a href="/blog">Main Blog Page</a>
             <a href="/newpost">Add a Blog Entry</a>
+            </tr>
         </nav>
         {% block content %}
         {% endblock %}

@@ -4,14 +4,15 @@
 
     <h1>Build a Blog</h1>
 
-    {% if blogs|length == 0 %}
-    <p>No blogs yet</p>
+    {% if all_blogs|length == 0 %}
+    <h3>No blogs yet</h3>
     {% else %}
 
        <div class="blogEntry">
-           {% for blog in blogs %}
+           {% for blog in all_blogs %}
             <h2><a href="blog?id={{blog.id}}">{{blog.title}}</a></h2>
-            <p class="forBorder">{{blog.body}}</p>
+            <p>{{blog.body}}</p>
+            <hr>
             {% endfor %}
         </div>
     

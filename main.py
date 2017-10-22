@@ -29,7 +29,7 @@ def index():
         return render_template('blog.html', title="Build a Blog", all_blogs=all_blogs)
 
 @app.route('/newpost', methods=['GET', 'POST'])
-def add_blog():
+def new_post():
     if request.method == 'GET':
         return render_template('newpost.html', title="Add Blog Entry") 
 

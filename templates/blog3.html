@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Build a Blog</h1>
+
+    {% if all_blogs|length == 0 %}
+    <h3>No blogs yet</h3>
+    {% else %}
+
+        {% for blog in all_blogs|sort(attribute='id', reverse = True) %}
+        <h2><a href="blog?id={{blog.id}}">{{blog.title}}</a></h2>
+        <p>{{blog.body}}</p>
+        <hr>
+        {% endfor %}
+
+    
+    {% endif %}
+{% endblock %}

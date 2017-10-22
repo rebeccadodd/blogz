@@ -19,8 +19,14 @@ class Blog(db.Model):
 
 @app.route("/blog", methods=['GET'])
 def blog():
-    all_blogs = Blog.query.all()
-    return render_template("blog.html", page_title="Build a Blog",all_blogs=all_blogs)
+    if request.args:
+        blog_id = request.args.get("id")
+        blog_entry = Blog.query.get(blog_id)
+        return render_template("individualpost.html", blog_entry=blog_entry)
+    else:
+        all_blogs = Blog.query.all()
+        return render_template("blog.html", page_title="Build a Blog", 
+                                            all_blogs=all_blogs)
 
 @app.route("/newpost", methods=['GET', 'POST'])
 def newpost():

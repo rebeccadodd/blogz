@@ -1,0 +1,16 @@
+error {
+    color: red;
+}
+
+h1 {
+    text-align: center;
+}
+
+textarea {
+    height: 200px;
+    width: 500px;
+}
+
+input[type="text"] {
+    width: 500px;
+}

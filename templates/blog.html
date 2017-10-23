@@ -6,7 +6,7 @@
     {% if all_blogs|length == 0 %}
         <p>No blogs yet</p>
     {% else %}
-        {% for blog_entry in all_blogs %}
+        {% for blog_entry in all_blogs|sort(attribute='id', reverse = True) %}
         <li><h2><a href="blog?id={{ blog_entry.id }}">{{ blog_entry.title }}</a></h2></li>
         <li>{{ blog_entry.body }}</li>
         <hr>

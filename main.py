@@ -17,33 +17,51 @@ class Blog(db.Model):
         self.title = title
         self.body = body
 
-@app.route('/blog', methods=['GET'])
-def index():
+@app.route("/blog", methods=['GET'])
+def blog():
     if request.args:
         blog_id = request.args.get("id")
-        blog = Blog.query.get(blog_id)
-        return render_template('blogpost.html', blog=blog)
-
+        blog_entry = Blog.query.get(blog_id)
+        return render_template("individualpost.html", blog_entry=blog_entry)
     else:
         all_blogs = Blog.query.all()
-        return render_template('blog.html', title="Build a Blog", all_blogs=all_blogs)
+        return render_template("blog.html", page_title="Build a Blog", 
+                                            all_blogs=all_blogs)
 
-@app.route('/newpost', methods=['GET', 'POST'])
-def new_post():
+@app.route("/newpost", methods=['GET', 'POST'])
+def newpost():
     if request.method == 'GET':
-        return render_template('newpost.html', title="Add Blog Entry") 
+        return render_template("newpost.html", page_title="Add a Blog Entry")
 
     if request.method == 'POST':
-        blog_title = request.form['title']
-        blog_body = request.form['body']
-        new_blog_post = Blog(blog_title, blog_body)
-        db.session.add(new_blog_post)
-        db.session.commit()
-        blog_entry ="/blog?id=" + str(new_blog_post.id)
-        return redirect(blog_entry)
-    
-    else:
-        return render_template('newpost.html', title="Add Blog Entry")
+        title = request.form['title']
+        body = request.form['body']
+        error_title = ""
+        error_body = ""
+
+        if title == "":
+            error_title = "Please fill in the title"
+
+        if body == "":
+            error_body = "Please fill in the body"
+
+        if error_title == "" and error_body == "":
+            new_blog_post = Blog(title, body)
+            db.session.add(new_blog_post)
+            db.session.commit()
+            new_blog_id = str(new_blog_post.id)
+            return redirect("/blog?id=" + new_blog_id)
+        else:
+            return render_template("newpost.html", page_title="Add a Blog Entry",
+                                                   error_title=error_title,
+                                                   error_body=error_body,
+                                                   title=title,
+                                                   body=body)
+
+@app.route("/", methods=['GET'])
+def index():
+    return redirect("/blog")
 
 if __name__ == '__main__':
     app.run()
+    

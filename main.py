@@ -134,6 +134,8 @@ def newpost():
     if request.method == 'GET':
         return render_template("newpost.html", page_title="Add a Blog Entry")
 
+    owner = User.query.filter_by(username=session['username']).first()
+
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
@@ -147,7 +149,7 @@ def newpost():
             error_body = "Please fill in the body"
 
         if error_title == "" and error_body == "":
-            new_blog_post = Blog(title, body)
+            new_blog_post = Blog(title, body, owner)
             db.session.add(new_blog_post)
             db.session.commit()
             new_blog_id = str(new_blog_post.id)

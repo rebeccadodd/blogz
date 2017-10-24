@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>{{ page_title }}</h1>
+    
+    {% if all_users|length == 0 %}
+        <p>No users yet</p>
+    {% else %}
+        {% for user in all_users %}
+        <ul>
+            <li><h3>{{ user.username }}</h3></li>
+        </ul>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}

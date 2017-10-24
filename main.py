@@ -163,7 +163,9 @@ def newpost():
 
 @app.route("/", methods=['GET'])
 def index():
-    return redirect("/blog")
+    all_users = User.query.all()
+    return render_template("index.html", page_title="blog users!",
+                                         all_users=all_users)
 
 if __name__ == '__main__':
     app.run()

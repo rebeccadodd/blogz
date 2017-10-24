@@ -107,7 +107,11 @@ def signup():
                                                   error_password=error_password,
                                                   error_verify=error_verify,
                                                   username=username)
-            
+@app.route('/logout')
+def logout():
+    del session['username']
+    return redirect('/blog')
+
 @app.route("/blog", methods=['GET'])
 def blog():
     if request.args:

@@ -2,7 +2,8 @@
 
 {% block content %}
 
-<li><h2>{{ blog_entry.title }}</h2></li>
-<li>{{ blog_entry.body }}</li>
+<h2>{{ blog_entry.title }}</h2>
+{{ blog_entry.body }}
+<h5>written by (individualpost template): <a href="blog?user={{ blog_entry.owner.id }}">{{ blog_entry.owner.username }}</a></h5>
 
 {% endblock %}

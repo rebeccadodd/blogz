@@ -120,10 +120,17 @@ def logout():
 
 @app.route("/blog", methods=['GET'])
 def blog():
-    if request.args:
+    if "id" in request.args:
         blog_id = request.args.get("id")
         blog_entry = Blog.query.get(blog_id)
         return render_template("individualpost.html", blog_entry=blog_entry)
+
+    if "user" in request.args:
+        user_id = request.args.get("user")
+        user = User.query.get(user_id)
+        user_blogs = Blog.query.filter_by(owner=user).all()
+        return render_template("individualuser.html", user_blogs=user_blogs)
+
     else:
         all_blogs = Blog.query.all()
         return render_template("blog.html", page_title="Build a Blog",
@@ -154,6 +161,7 @@ def newpost():
             db.session.commit()
             new_blog_id = str(new_blog_post.id)
             return redirect("/blog?id=" + new_blog_id)
+
         else:
             return render_template("newpost.html", page_title="Add a Blog Entry",
                                                    error_title=error_title,

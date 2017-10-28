@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, flash, session
+from flask import Flask, request, render_template, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -34,13 +34,18 @@ class User(db.Model):
 @app.before_request
 def require_login():
     allowed_routes = ['login', 'signup', 'blog', 'index']
-    if request.endpoint not in allowed_routes and 'username' not in session:
+    if (request.endpoint not in allowed_routes
+           and 'username' not in session
+           and not request.path.startswith('/static/')):
         return redirect('/login')
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template("login.html")
+        if 'username' not in session:
+            return render_template("login.html", page_title='Login')
+        else:
+            return redirect('/newpost')
 
     if request.method == 'POST':
         username = request.form['username']
@@ -53,14 +58,15 @@ def login():
             session['username'] = username
             return redirect('/newpost')
 
-        if user and user.password != password:
+        elif user and user.password != password:
             error_password = "Password is invalid"
+            return render_template('login.html', error_password=error_password)
 
         else:
             error_username = "Username does not exist"
-
-        return render_template('login.html', error_password=error_password,
-                                             error_username=error_username)
+            return render_template('login.html', error_username=error_username)
+        
+    return render_template("login.html", page_title='Login')
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -129,17 +135,18 @@ def blog():
         user_id = request.args.get("user")
         user = User.query.get(user_id)
         user_blogs = Blog.query.filter_by(owner=user).all()
-        return render_template("individualuser.html", user_blogs=user_blogs)
+        return render_template("individualuser.html", page_title = user.username + "'s Posts!", 
+                                                      user_blogs=user_blogs)
 
     else:
         all_blogs = Blog.query.all()
-        return render_template("blog.html", page_title="Build a Blog",
+        return render_template("blog.html", page_title="Blog posts!",
                                             all_blogs=all_blogs)
 
 @app.route("/newpost", methods=['GET', 'POST'])
 def newpost():
     if request.method == 'GET':
-        return render_template("newpost.html", page_title="Add a Blog Entry")
+        return render_template("newpost.html", page_title="Add a New Blog Entry")
 
     owner = User.query.filter_by(username=session['username']).first()
 
@@ -172,7 +179,7 @@ def newpost():
 @app.route("/", methods=['GET'])
 def index():
     all_users = User.query.all()
-    return render_template("index.html", page_title="blog users!",
+    return render_template("index.html", page_title="Blog Users!",
                                          all_users=all_users)
 
 if __name__ == '__main__':

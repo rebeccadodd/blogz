@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    <h1>{{ page_title }}</h1>
     
     {% if user_blogs|length == 0 %}
         <p>No blogs yet</p>
@@ -10,7 +8,8 @@
         {% for blog in user_blogs|sort(attribute='id', reverse = True) %}
             <h2><a href="blog?id={{ blog.id }}">{{ blog.title }}</a></h2>
             {{ blog.body }}
-            <h5>written by (individualuser template): <a href="blog?id={{ blog.owner.id }}">{{ blog.owner.username }}</a></h5>
+            <h5>written by: 
+                <a href="blog?user={{ blog.owner.id }}">{{ blog.owner.username }}</a></h5>
             <hr>
         {% endfor %}
     {% endif %}
